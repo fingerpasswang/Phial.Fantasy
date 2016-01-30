@@ -1,0 +1,42 @@
+[Common]
+Name = test
+Id = 1
+
+[MQService]
+MQIP = 192.168.0.103
+MQTTPort = 1883
+AMQPPort = 5673
+MQUser = test
+MQPass = root
+
+[DataService]
+CacheConn = 192.168.0.103:6611|192.168.0.103:6621|192.168.0.103:6631
+
+DbIP=192.168.0.103:
+DbName = test
+DbUser = root
+DbPass = test
+
+[WatcherService]
+WatchNum = 3
+
+WatchName1 = master1
+WatchAddr1 = 192.168.0.103:6611
+WatchQuorum1 = 2
+WatchDownAfter1 = 5000
+WatchParallelSync1 = 1
+WatchFailoverTimeout1 = 30000
+
+WatchName2 = master2
+WatchAddr2 = 192.168.0.103:6621
+WatchQuorum2 = 2
+WatchDownAfter2 = 5000
+WatchParallelSync2 = 1
+WatchFailoverTimeout2 = 30000
+
+WatchName3 = master3
+WatchAddr3 = 192.168.0.103:6631
+WatchQuorum3 = 1
+WatchDownAfter3 = 15000
+WatchParallelSync3 = 1
+WatchFailoverTimeout3 = 60000
