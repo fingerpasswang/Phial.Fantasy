@@ -50,9 +50,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)\..\tool\ServiceCodeC.exe $(TargetPath) $(SolutionDir)\..\tool\CoolFormat.exe $(ProjectDir)\..\Auto.Client\AutoGen.cs $(ProjectDir)\..\Auto.Server\AutoGen.cs
+    <PostBuildEvent>$(ProjectDir)\..\..\tool\ServiceCodeC.exe $(TargetPath) $(ProjectDir)\..\..\tool\CoolFormat.exe $(ProjectDir)\..\Auto.Client\AutoGen.cs $(ProjectDir)\..\Auto.Server\AutoGen.cs
 
-$(SolutionDir)\..\tool\ModelCodeC.exe $(TargetPath) $(SolutionDir)\..\tool\CoolFormat.exe $(ProjectDir)\..\Auto.Client\Serialize.cs $(ProjectDir)\..\Auto.Server\Serialize.cs $(ProjectDir)\..\Auto.Server\DataAccessAuoGen.cs
+$(ProjectDir)\..\..\tool\ModelCodeC.exe $(TargetPath) $(ProjectDir)\..\..\tool\CoolFormat.exe $(ProjectDir)\..\Auto.Client\Serialize.cs $(ProjectDir)\..\Auto.Server\Serialize.cs $(ProjectDir)\..\Auto.Server\DataAccessAuoGen.cs
 
 </PostBuildEvent>
   </PropertyGroup>
