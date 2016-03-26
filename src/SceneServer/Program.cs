@@ -13,7 +13,7 @@ namespace Test.SceneServer
     class Program
     {
         public static GateAdaptor GateAdaptor;
-        public static ClientSceneServiceDelegate ClientSceneService;
+        public static Scene2CliServiceDelegate Scene2CliService;
 
         static void InitService()
         {
@@ -23,9 +23,9 @@ namespace Test.SceneServer
 
             GateAdaptor = new GateAdaptor("127.0.0.1", 6999);
 
-            ServiceImplementStub.Bind<ISceneClientImpl>(GateAdaptor, new SceneClientServiceImpl());
+            ServiceImplementStub.Bind<ICli2SceneImpl>(GateAdaptor, new SceneClientServiceImpl());
 
-            ClientSceneService = new ClientSceneServiceDelegate(GateAdaptor);
+            Scene2CliService = new Scene2CliServiceDelegate(GateAdaptor);
 
             GateAdaptor.BeginReceive();
             //Heartbeat();
@@ -78,7 +78,7 @@ namespace Test.SceneServer
                             {
                                 var uuid = new Guid(inputs[1]);
 
-                                GateAdaptor.Subscribe<ISceneClientImpl>(uuid.ToByteArray());
+                                GateAdaptor.Subscribe<ICli2SceneImpl>(uuid.ToByteArray());
 
                                 break;
                             }
@@ -86,7 +86,7 @@ namespace Test.SceneServer
                             {
                                 var uuid = new Guid(inputs[1]);
 
-                                GateAdaptor.AddForward<ISceneClientImpl>(uuid.ToByteArray(), 1);
+                                GateAdaptor.AddForward<ICli2SceneImpl>(uuid.ToByteArray(), 1);
 
                                 break;
                             }

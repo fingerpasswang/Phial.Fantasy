@@ -7,7 +7,7 @@ using ServerUtils;
 
 namespace LogicServer
 {
-    class LogicClientServiceImpl : ILogicClientImpl
+    class LogicClientServiceImpl : ICli2LogicImpl
     {
         private async Task<bool> CheckValid(ulong pid)
         {
@@ -55,7 +55,7 @@ namespace LogicServer
 
                 await accesser.SubmitChanges();
 
-                Program.ClientLogicService.Forward(sessionId).ServerMessageOk();
+                Program.Logic2CliService.Forward(sessionId).ServerMessageOk();
 
                 return true;
             }
@@ -86,7 +86,7 @@ namespace LogicServer
 
                 await accesser.SubmitChanges();
 
-                Program.ClientLogicService.Forward(sessionId).ServerMessageOk();
+                Program.Logic2CliService.Forward(sessionId).ServerMessageOk();
 
                 return true;
             }
@@ -121,7 +121,7 @@ namespace LogicServer
 
                 await accesser.SubmitChanges();
 
-                Program.ClientLogicService.Forward(sessionId).ServerMessageOk();
+                Program.Logic2CliService.Forward(sessionId).ServerMessageOk();
 
                 return true;
             }

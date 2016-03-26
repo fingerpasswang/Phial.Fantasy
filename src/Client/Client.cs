@@ -17,11 +17,11 @@ namespace ClientTest
     class Client
     {
         private MqttAdaptor MqttAdaptor;
-        private LogicClientServiceDelegate LogicService;
-        private LoginClientServiceDelegate LoginService;
+        private ICli2LogicInvoke LogicService;
+        private ICli2LoginInvoke LoginService;
 
         private GateAdaptor GateAdaptor;
-        private SceneClientServiceDelegate SceneService;
+        private ICli2SceneInvoke SceneService;
 
         private ulong pid;
 
@@ -50,7 +50,7 @@ namespace ClientTest
         {
             Console.WriteLine(" MQTT connected,  BeginTest....");
 
-            LoginService = new LoginClientServiceDelegate(MqttAdaptor);
+            LoginService = new Cli2LoginServiceDelegate(MqttAdaptor);
 
             AskLogin();
 
@@ -58,8 +58,8 @@ namespace ClientTest
 
             RoutingRule.DistrictsName = "test";
 
-            SceneService = new SceneClientServiceDelegate(GateAdaptor);
-            ServiceImplementStub.Bind<IClientSceneImpl>(GateAdaptor, new SceneServiceImpl());
+            SceneService = new Cli2SceneServiceDelegate(GateAdaptor);
+            ServiceImplementStub.Bind<IScene2CliImpl>(GateAdaptor, new SceneServiceImpl());
 
             Interoperate();
         }
@@ -117,8 +117,8 @@ namespace ClientTest
 
                  pid = list.Pid;
                  Console.WriteLine(string.Format("------------we are in {0}----------------", RoutingRule.DistrictsName));
-                 LogicService = new LogicClientServiceDelegate(MqttAdaptor);
-                 ServiceImplementStub.Bind<IClientLogicImpl>(MqttAdaptor, new ClientLogicServiceImpl());
+                 LogicService = new Cli2LogicServiceDelegate(MqttAdaptor);
+                 ServiceImplementStub.Bind<ILogic2CliImpl>(MqttAdaptor, new ClientLogicServiceImpl());
                  Interoperate();
              };
         }

@@ -4,7 +4,7 @@ using RPCBase;
 
 namespace ClientTest
 {
-    class ClientLogicServiceImpl : IClientLogicImpl
+    class ClientLogicServiceImpl : ILogic2CliImpl
     {
         public void ServerMessageOk()
         {

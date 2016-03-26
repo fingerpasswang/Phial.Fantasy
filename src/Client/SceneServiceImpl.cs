@@ -6,7 +6,7 @@ using RPCBase;
 
 namespace ClientTest
 {
-    class SceneServiceImpl : IClientSceneImpl
+    class SceneServiceImpl : IScene2CliImpl
     {
         public IRpcImplInstnce SetSourceUuid(byte[] srcUuid)
         {

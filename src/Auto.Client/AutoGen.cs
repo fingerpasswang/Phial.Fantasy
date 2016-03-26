@@ -8,68 +8,68 @@ namespace Auto.Client
 
     public static class AutoInit
     {
-        internal const string LogicClient = "LogicClient";
-        internal const string ClientScene = "ClientScene";
-        internal const string SceneClient = "SceneClient";
-        internal const string LoginClient = "LoginClient";
-        internal const string ClientLogic = "ClientLogic";
+        internal const string Cli2Logic = "Cli2Logic";
+        internal const string Scene2Cli = "Scene2Cli";
+        internal const string Cli2Scene = "Cli2Scene";
+        internal const string Cli2Login = "Cli2Login";
+        internal const string Logic2Cli = "Logic2Cli";
         static AutoInit()
         {
-            MetaData.SetServiceId(typeof(IClientSceneImpl), ClientScene);
-            MetaData.SetMethodSerializer(typeof(IClientSceneImpl), ClientSceneSerializer.Instance);
-            MetaData.SetServiceMethodDispatcher(typeof(IClientSceneImpl), ClientSceneDispatcher.Instance);
+            MetaData.SetServiceId(typeof(IScene2CliImpl), Scene2Cli);
+            MetaData.SetMethodSerializer(typeof(IScene2CliImpl), Scene2CliSerializer.Instance);
+            MetaData.SetServiceMethodDispatcher(typeof(IScene2CliImpl), Scene2CliDispatcher.Instance);
 
 
-            MetaData.SetServiceId(typeof(IClientLogicImpl), ClientLogic);
-            MetaData.SetMethodSerializer(typeof(IClientLogicImpl), ClientLogicSerializer.Instance);
-            MetaData.SetServiceMethodDispatcher(typeof(IClientLogicImpl), ClientLogicDispatcher.Instance);
-            MetaData.SetServiceRoutingRule(LogicClient, new RoutingRule()
+            MetaData.SetServiceId(typeof(ILogic2CliImpl), Logic2Cli);
+            MetaData.SetMethodSerializer(typeof(ILogic2CliImpl), Logic2CliSerializer.Instance);
+            MetaData.SetServiceMethodDispatcher(typeof(ILogic2CliImpl), Logic2CliDispatcher.Instance);
+            MetaData.SetServiceRoutingRule(Cli2Logic, new RoutingRule()
             {
                 MqttRule = new RoutingRule.MqttRoutingRule()
                 {
-                    PublishKey = (districts, uuid) => string.Format("{0}/LogicClient/invoke", districts),
-                    SubscribeKey = (districts, uuid) => string.Format("{0}/LogicClient/return/{1}", districts, uuid),
+                    PublishKey = (districts, uuid) => string.Format("{0}/Cli2Logic/invoke", districts),
+                    SubscribeKey = (districts, uuid) => string.Format("{0}/Cli2Logic/return/{1}", districts, uuid),
                 },
                 GateRule = new RoutingRule.GateRoutingRule() {ServiceId  = s => 4,},
             });
-            MetaData.SetServiceRoutingRule(ClientScene, new RoutingRule()
+            MetaData.SetServiceRoutingRule(Scene2Cli, new RoutingRule()
             {
                 MqttRule = new RoutingRule.MqttRoutingRule()
                 {
-                    SubscribeKey = (districts, uuid) => string.Format("{0}/ClientScene/sync/{1}", districts, uuid),
+                    SubscribeKey = (districts, uuid) => string.Format("{0}/Scene2Cli/sync/{1}", districts, uuid),
                 },
                 GateRule = new RoutingRule.GateRoutingRule() {ServiceId  = s => 5,},
             });
-            MetaData.SetServiceRoutingRule(SceneClient, new RoutingRule()
+            MetaData.SetServiceRoutingRule(Cli2Scene, new RoutingRule()
             {
                 MqttRule = new RoutingRule.MqttRoutingRule()
                 {
-                    PublishKey = (districts, uuid) => string.Format("{0}/SceneClient/invoke", districts),
-                    SubscribeKey = (districts, uuid) => string.Format("{0}/SceneClient/return/{1}", districts, uuid),
+                    PublishKey = (districts, uuid) => string.Format("{0}/Cli2Scene/invoke", districts),
+                    SubscribeKey = (districts, uuid) => string.Format("{0}/Cli2Scene/return/{1}", districts, uuid),
                 },
                 GateRule = new RoutingRule.GateRoutingRule() {ServiceId  = s => 6,},
             });
-            MetaData.SetServiceRoutingRule(LoginClient, new RoutingRule()
+            MetaData.SetServiceRoutingRule(Cli2Login, new RoutingRule()
             {
                 MqttRule = new RoutingRule.MqttRoutingRule()
                 {
-                    PublishKey = (districts, uuid) => string.Format("padding/LoginClient/invoke"),
-                    SubscribeKey = (districts, uuid) => string.Format("padding/LoginClient/return/{0}", uuid),
+                    PublishKey = (districts, uuid) => string.Format("{0}/Cli2Login/invoke", districts),
+                    SubscribeKey = (districts, uuid) => string.Format("{0}/Cli2Login/return/{1}", districts, uuid),
                 },
                 GateRule = new RoutingRule.GateRoutingRule() {ServiceId  = s => 7,},
             });
-            MetaData.SetServiceRoutingRule(ClientLogic, new RoutingRule()
+            MetaData.SetServiceRoutingRule(Logic2Cli, new RoutingRule()
             {
                 MqttRule = new RoutingRule.MqttRoutingRule()
                 {
-                    SubscribeKey = (districts, uuid) => string.Format("{0}/ClientLogic/sync/{1}", districts, uuid),
+                    SubscribeKey = (districts, uuid) => string.Format("{0}/Logic2Cli/sync/{1}", districts, uuid),
                 },
                 GateRule = new RoutingRule.GateRoutingRule() {ServiceId  = s => 8,},
             });
         } public static void Init() {}
     }
-    #region LogicClient
-    public interface ILogicClientInvoke
+    #region Cli2Logic
+    public interface ICli2LogicInvoke
     {
         InvokeOperation<Boolean> AskChangeName(UInt64 pid, String newName);
         InvokeOperation<Boolean> AskAddMoney(UInt64 pid, UInt32 money);
@@ -83,13 +83,13 @@ namespace Auto.Client
         InvokeOperation<TestBaseClass> TestHierarch2y(TestBaseClass b, TestDerived1Class d1, TestDerived11Class d11);
     }
 
-    public class LogicClientServiceDelegate: ILogicClientInvoke
+    public class Cli2LogicServiceDelegate: ICli2LogicInvoke
     {
         private readonly ServiceDelegateStub serviceDelegateStub;
-        public LogicClientServiceDelegate(IDataSender dataSender)
+        public Cli2LogicServiceDelegate(IDataSender dataSender)
         {
-            serviceDelegateStub = new ServiceDelegateStub(dataSender, LogicClientSerializer.Instance, MetaData.GetServiceRoutingRule(AutoInit.LogicClient));
-            dataSender.RegisterDelegate(serviceDelegateStub, AutoInit.LogicClient);
+            serviceDelegateStub = new ServiceDelegateStub(dataSender, Cli2LogicSerializer.Instance, MetaData.GetServiceRoutingRule(AutoInit.Cli2Logic));
+            dataSender.RegisterDelegate(serviceDelegateStub, AutoInit.Cli2Logic);
         }
 
         #region meta data
@@ -167,9 +167,9 @@ namespace Auto.Client
 
     }
 
-    public class LogicClientSerializer : IMethodSerializer
+    public class Cli2LogicSerializer : IMethodSerializer
     {
-        public static readonly LogicClientSerializer Instance = new LogicClientSerializer();
+        public static readonly Cli2LogicSerializer Instance = new Cli2LogicSerializer();
         public RpcMethod Read(BinaryReader br)
         {
             RpcMethod method = new RpcMethod();
@@ -675,29 +675,29 @@ namespace Auto.Client
         }
     }
     #endregion
-    #region ClientScene
-    public interface IClientSceneImpl: IRpcImplInstnce
+    #region Scene2Cli
+    public interface IScene2CliImpl: IRpcImplInstnce
     {
         void SyncPosition(Int32 x, Int32 y);
     }
 
 
-    public class ClientSceneDispatcher : IServiceMethodDispatcher
+    public class Scene2CliDispatcher : IServiceMethodDispatcher
     {
-        public static readonly ClientSceneDispatcher Instance = new ClientSceneDispatcher();
+        public static readonly Scene2CliDispatcher Instance = new Scene2CliDispatcher();
         public void Dispatch(IRpcImplInstnce impl, RpcMethod method, ServiceImplementStub.SendResult cont)
         {
             switch (method.MethodId)
             {
             case 1:
-                ((IClientSceneImpl)impl).SyncPosition((Int32)(method.Args[0]), (Int32)(method.Args[1]));
+                ((IScene2CliImpl)impl).SyncPosition((Int32)(method.Args[0]), (Int32)(method.Args[1]));
                 break;
             }
         }
     }
-    public class ClientSceneSerializer : IMethodSerializer
+    public class Scene2CliSerializer : IMethodSerializer
     {
-        public static readonly ClientSceneSerializer Instance = new ClientSceneSerializer();
+        public static readonly Scene2CliSerializer Instance = new Scene2CliSerializer();
         public RpcMethod Read(BinaryReader br)
         {
             RpcMethod method = new RpcMethod();
@@ -733,19 +733,19 @@ namespace Auto.Client
         public void WriteReturn(RpcMethod method, BinaryWriter bw, object value) {}
     }
     #endregion
-    #region SceneClient
-    public interface ISceneClientInvoke
+    #region Cli2Scene
+    public interface ICli2SceneInvoke
     {
         InvokeOperation<Boolean> AskMoveTo(Int32 x, Int32 y);
     }
 
-    public class SceneClientServiceDelegate: ISceneClientInvoke
+    public class Cli2SceneServiceDelegate: ICli2SceneInvoke
     {
         private readonly ServiceDelegateStub serviceDelegateStub;
-        public SceneClientServiceDelegate(IDataSender dataSender)
+        public Cli2SceneServiceDelegate(IDataSender dataSender)
         {
-            serviceDelegateStub = new ServiceDelegateStub(dataSender, SceneClientSerializer.Instance, MetaData.GetServiceRoutingRule(AutoInit.SceneClient));
-            dataSender.RegisterDelegate(serviceDelegateStub, AutoInit.SceneClient);
+            serviceDelegateStub = new ServiceDelegateStub(dataSender, Cli2SceneSerializer.Instance, MetaData.GetServiceRoutingRule(AutoInit.Cli2Scene));
+            dataSender.RegisterDelegate(serviceDelegateStub, AutoInit.Cli2Scene);
         }
 
         #region meta data
@@ -760,9 +760,9 @@ namespace Auto.Client
         }
     }
 
-    public class SceneClientSerializer : IMethodSerializer
+    public class Cli2SceneSerializer : IMethodSerializer
     {
-        public static readonly SceneClientSerializer Instance = new SceneClientSerializer();
+        public static readonly Cli2SceneSerializer Instance = new Cli2SceneSerializer();
         public RpcMethod Read(BinaryReader br)
         {
             RpcMethod method = new RpcMethod();
@@ -814,19 +814,19 @@ namespace Auto.Client
         }
     }
     #endregion
-    #region LoginClient
-    public interface ILoginClientInvoke
+    #region Cli2Login
+    public interface ICli2LoginInvoke
     {
         InvokeOperation<ServerList> AskLogin(String username, String password, Byte[] uuid);
     }
 
-    public class LoginClientServiceDelegate: ILoginClientInvoke
+    public class Cli2LoginServiceDelegate: ICli2LoginInvoke
     {
         private readonly ServiceDelegateStub serviceDelegateStub;
-        public LoginClientServiceDelegate(IDataSender dataSender)
+        public Cli2LoginServiceDelegate(IDataSender dataSender)
         {
-            serviceDelegateStub = new ServiceDelegateStub(dataSender, LoginClientSerializer.Instance, MetaData.GetServiceRoutingRule(AutoInit.LoginClient));
-            dataSender.RegisterDelegate(serviceDelegateStub, AutoInit.LoginClient);
+            serviceDelegateStub = new ServiceDelegateStub(dataSender, Cli2LoginSerializer.Instance, MetaData.GetServiceRoutingRule(AutoInit.Cli2Login));
+            dataSender.RegisterDelegate(serviceDelegateStub, AutoInit.Cli2Login);
         }
 
         #region meta data
@@ -841,9 +841,9 @@ namespace Auto.Client
         }
     }
 
-    public class LoginClientSerializer : IMethodSerializer
+    public class Cli2LoginSerializer : IMethodSerializer
     {
-        public static readonly LoginClientSerializer Instance = new LoginClientSerializer();
+        public static readonly Cli2LoginSerializer Instance = new Cli2LoginSerializer();
         public RpcMethod Read(BinaryReader br)
         {
             RpcMethod method = new RpcMethod();
@@ -942,29 +942,29 @@ namespace Auto.Client
         }
     }
     #endregion
-    #region ClientLogic
-    public interface IClientLogicImpl: IRpcImplInstnce
+    #region Logic2Cli
+    public interface ILogic2CliImpl: IRpcImplInstnce
     {
         void ServerMessageOk();
     }
 
 
-    public class ClientLogicDispatcher : IServiceMethodDispatcher
+    public class Logic2CliDispatcher : IServiceMethodDispatcher
     {
-        public static readonly ClientLogicDispatcher Instance = new ClientLogicDispatcher();
+        public static readonly Logic2CliDispatcher Instance = new Logic2CliDispatcher();
         public void Dispatch(IRpcImplInstnce impl, RpcMethod method, ServiceImplementStub.SendResult cont)
         {
             switch (method.MethodId)
             {
             case 1:
-                ((IClientLogicImpl)impl).ServerMessageOk();
+                ((ILogic2CliImpl)impl).ServerMessageOk();
                 break;
             }
         }
     }
-    public class ClientLogicSerializer : IMethodSerializer
+    public class Logic2CliSerializer : IMethodSerializer
     {
-        public static readonly ClientLogicSerializer Instance = new ClientLogicSerializer();
+        public static readonly Logic2CliSerializer Instance = new Logic2CliSerializer();
         public RpcMethod Read(BinaryReader br)
         {
             RpcMethod method = new RpcMethod();
@@ -1000,7 +1000,7 @@ namespace Auto.Client
     {
         public static string GetServiceVersion()
         {
-            return "c3d1e8ffa11351519bf0d3ce43fd8b17";
+            return "e27cac217e3915fcd7dc940c4bbaacaa";
         }
     }
 }

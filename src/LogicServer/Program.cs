@@ -16,14 +16,14 @@ namespace LogicServer
         private static AmqpAdaptor amqpAdaptor;
         private static ZkAdaptor zkAdaptor;
 
-        public static ClientLogicServiceDelegate ClientLogicService;
+        public static Logic2CliServiceDelegate Logic2CliService;
 
         public static RedisDataServiceDelegate CacheService;
         public static MysqlDataServiceDelegate DbService;
 
         private static DbClientNotifyDelegate dbClientNotifyDelegate;
         private static LoginNotifyDelegate loginNotifyDelegate;
-        private static SchedulerLogicServiceDelegate SchedulerLogicService;
+        private static Logic2SchedulerServiceDelegate SchedulerLogicService;
         static void InitService()
         {
             AutoInit.Init();
@@ -38,7 +38,7 @@ namespace LogicServer
             //ServiceImplementStub.Bind<LogicClientServiceImpl, ILogicClientImpl>(amqpAdaptor, new LogicClientServiceImpl());
             ServiceImplementStub.Bind<IDbClientNotifyImpl>(zkAdaptor, new NotifyServiceImpl());
 
-            //ClientLogicService = new ClientLogicServiceDelegate(amqpAdaptor);
+            //Logic2CliService = new ClientLogicServiceDelegate(amqpAdaptor);
             //loginNotifyDelegate = new LoginNotifyDelegate(amqpAdaptor);
             //SchedulerLogicService = new SchedulerLogicServiceDelegate(amqpAdaptor);
 

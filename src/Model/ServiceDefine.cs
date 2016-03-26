@@ -22,8 +22,8 @@ namespace DataModel
         void NotifyInstanceSubjectiveDown(byte[] srcUuid, string addr);
     }
 
-    [Service]
-    public interface ILogicClientService
+    [Service(ServiceScope.ClientToServer)]
+    public interface ICli2Logic
     {
         bool AskChangeName(ulong pid, string newName);
         bool AskAddMoney(ulong pid, uint money);
@@ -38,30 +38,31 @@ namespace DataModel
     }
 
     [Sync(true)]
-    public interface IClientSceneService
+    public interface IScene2Cli
     {
         void SyncPosition(int x, int y);
     }
 
-    [Service]
-    public interface ISceneClientService
+    [Service(ServiceScope.ClientToServer)]
+    public interface ICli2Scene
     {
         bool AskMoveTo(int x, int y);
     }
 
-    [Service(false)]
-    public interface ILoginClientService
+    [Service(ServiceScope.ClientToServer), Divisional(false)]
+    public interface ICli2Login
     {
         ServerList AskLogin(string username, string password, byte[] uuid);
     }
 
     [Sync]
-    public interface IClientLogicService
+    public interface ILogic2Cli
     {
         void ServerMessageOk();
     }
-    [Service]
-    public interface ISchedulerLogicService
+
+    [Service(ServiceScope.InterServer)]
+    public interface ILogic2Scheduler
     {
         ulong RequestScheduleJob(int job);
     }

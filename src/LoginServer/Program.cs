@@ -20,7 +20,7 @@ namespace LoginServer
             AutoInit.Init();
             AmqpAdaptor AmqpAdaptor = new AmqpAdaptor(ConfigManager.MQIP(), ConfigManager.AMQPPort(),
                 ConfigManager.MQUser(), ConfigManager.MQPass());
-            ServiceImplementStub.Bind<ILoginClientImpl>(AmqpAdaptor, new LoginClientServiceImpl());
+            ServiceImplementStub.Bind<ICli2LoginImpl>(AmqpAdaptor, new LoginClientServiceImpl());
             ServiceImplementStub.Bind<ILoginNotifyImpl>(AmqpAdaptor, new LoginNotifyImpl());
             AmqpAdaptor.BeginReceive();
 

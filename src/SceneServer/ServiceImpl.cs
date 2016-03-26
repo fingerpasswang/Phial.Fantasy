@@ -5,15 +5,15 @@ using RPCBase;
 
 namespace Test.SceneServer
 {
-    class SceneClientServiceImpl : ISceneClientImpl
+    class SceneClientServiceImpl : ICli2SceneImpl
     {
         public async Task<bool> AskMoveTo(int x, int y)
         {
             Console.WriteLine("AskMoveTo x:{0} y:{1}", x, y);
 
-            //Program.ClientSceneService.Forward(currentClientUuid).SyncPosition(x, y);
+            //Program.Scene2CliService.Forward(currentClientUuid).SyncPosition(x, y);
 
-            Program.ClientSceneService.SyncPositionMulticast(1, x, y);
+            Program.Scene2CliService.SyncPositionMulticast(1, x, y);
 
             return true;
         }

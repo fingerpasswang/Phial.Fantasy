@@ -6,7 +6,7 @@ using ServerUtils;
 
 namespace LoginServer
 {
-    class LoginClientServiceImpl : ILoginClientImpl
+    class LoginClientServiceImpl : ICli2LoginImpl
     {
         public async Task<ServerList> AskLogin(string user, string password,  byte[] uuid)
         {
